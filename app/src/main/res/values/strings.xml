@@ -13,4 +13,9 @@
     <string name="TTable">Расписание</string>
     <string name="Profile">Профиль</string>
     <string name="todo">TODO</string>
+    <string name="title_activity_head">Head</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_my_fpmpage">MyFPMpage</string>
 </resources>

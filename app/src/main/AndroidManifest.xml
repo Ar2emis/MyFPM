@@ -12,8 +12,8 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
-                android:name=".MainProjectList"
-                android:label="@string/title_activity_main_project_list">
+                android:name=".MyFPMpage"
+                android:label="@string/title_activity_my_fpmpage">
         </activity>
         <activity android:name=".Reg2Page">
         </activity>

@@ -5,21 +5,21 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
 
-class MainProjectList : AppCompatActivity() {
+class MyFPMpage : AppCompatActivity() {
 
     private lateinit var textMessage: TextView
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
-            R.id.navigation_news -> {
-                textMessage.setText(R.string.News)
+            R.id.navigation_home -> {
+                textMessage.setText(R.string.title_home)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_timetable -> {
-                textMessage.setText(R.string.TTable)
+            R.id.navigation_dashboard -> {
+                textMessage.setText(R.string.title_dashboard)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_profile -> {
-                textMessage.setText(R.string.Profile)
+            R.id.navigation_notifications -> {
+                textMessage.setText(R.string.title_notifications)
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -28,7 +28,7 @@ class MainProjectList : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main_project_list)
+        setContentView(R.layout.activity_my_fpmpage)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
         textMessage = findViewById(R.id.message)
