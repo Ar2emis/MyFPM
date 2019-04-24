@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">MyFPM</string>
+    <string name="Enter">Вход</string>
+    <string name="Reg">Регистрация</string>
+    <string name="TelNum">Номер телефона</string>
+    <string name="Passw">Пароль</string>
+    <string name="Goto">Далее</string>
+    <string name="name">Введите имя</string>
+    <string name="sur">Введите фамилию</string>
 </resources>
