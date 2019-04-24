@@ -10,15 +10,15 @@ class MyFPMpage : AppCompatActivity() {
     private lateinit var textMessage: TextView
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
-            R.id.navigation_home -> {
+            R.id.navigation_news -> {
                 textMessage.setText(R.string.title_home)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_dashboard -> {
+            R.id.navigation_timetable -> {
                 textMessage.setText(R.string.title_dashboard)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_notifications -> {
+            R.id.navigation_profile -> {
                 textMessage.setText(R.string.title_notifications)
                 return@OnNavigationItemSelectedListener true
             }

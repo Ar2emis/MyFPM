@@ -15,11 +15,13 @@
                 android:name=".MyFPMpage"
                 android:label="@string/title_activity_my_fpmpage">
         </activity>
-        <activity android:name=".Reg2Page">
+        <activity android:name=".Reg2Page"
+                  android:noHistory="true">
         </activity>
         <activity android:name=".Reg1Page">
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+                  android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
