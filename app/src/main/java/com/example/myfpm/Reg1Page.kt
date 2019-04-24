@@ -14,8 +14,5 @@ class Reg1Page : AppCompatActivity() {
         val conn = ConnectionClass().Connect()
     }
 
-    fun ObClick2 (view: View){
-        val intent = Intent(this, Reg2Page::class.java )
-        startActivity(intent)
-    }
+
 }

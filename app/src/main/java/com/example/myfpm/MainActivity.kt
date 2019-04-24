@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onClick2 (view: View){
-        val intent = Intent(this, MainProjectList::class.java )
+        val intent = Intent(this, MyFPMpage::class.java )
         startActivity(intent)
     }
 }
