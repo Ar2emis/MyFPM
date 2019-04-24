@@ -14,5 +14,8 @@ class Reg1Page : AppCompatActivity() {
         val conn = ConnectionClass().Connect()
     }
 
-
+    fun obClick2 (view: View){
+        val intent = Intent(this, MyFPMpage::class.java )
+        startActivity(intent)
+    }
 }
