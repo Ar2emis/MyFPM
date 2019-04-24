@@ -16,4 +16,9 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, Reg1Page::class.java )
         startActivity(intent)
     }
+
+    fun onClick2 (view: View){
+        val intent = Intent(this, MainProjectList::class.java )
+        startActivity(intent)
+    }
 }

@@ -8,4 +8,9 @@
     <string name="name">Введите имя</string>
     <string name="sur">Введите фамилию</string>
     <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_main_project_list">My FPM</string>
+    <string name="News">Новости</string>
+    <string name="TTable">Расписание</string>
+    <string name="Profile">Профиль</string>
+    <string name="todo">TODO</string>
 </resources>

@@ -46,4 +46,12 @@
             app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="24dp" android:hint="@string/sur"
             android:importantForAutofill="no" tools:targetApi="o" android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginRight="24dp"/>
+    <ImageView
+            android:layout_width="176dp"
+            android:layout_height="142dp" app:srcCompat="@mipmap/truelogo"
+            android:id="@+id/imageView2"
+            android:layout_marginBottom="50dp" app:layout_constraintBottom_toTopOf="@+id/editText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent" android:contentDescription="@string/todo"/>
 </android.support.constraint.ConstraintLayout>
