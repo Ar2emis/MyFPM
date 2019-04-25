@@ -20,10 +20,10 @@
         </activity>
         <activity
                 android:name=".Reg2Page"
-                android:label="Регистрация. Шаг 3/3">>
+                android:label="Регистрация. Шаг 3/3">
         </activity>
         <activity android:name=".Reg1Page"
-                  android:label=" Регистрация. Шаг 1/3">>
+                  android:label=" Регистрация. Шаг 1/3">
         </activity>
         <activity
                 android:name=".MainActivity">
