@@ -11,7 +11,6 @@ class Reg1Page : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reg1_page)
-        val conn = ConnectionClass().Connect()
     }
 
     fun obClick2 (view: View){
