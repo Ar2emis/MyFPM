@@ -15,7 +15,7 @@ class Reg1Page : AppCompatActivity() {
     }
 
     fun obClick2 (view: View){
-        val intent = Intent(this, Reg2Page::class.java )
+        val intent = Intent(this, RegPersonPage::class.java )
         startActivity(intent)
     }
 }
