@@ -18,4 +18,7 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_my_fpmpage">MyFPMpage</string>
+    <string name="year">Выберите год поступления</string>
+    <string name="spec">Выберите специальность</string>
+    <string name="gr">Выберите группу</string>
 </resources>
