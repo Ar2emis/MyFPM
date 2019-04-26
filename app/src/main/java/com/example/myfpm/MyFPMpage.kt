@@ -34,4 +34,9 @@ class MyFPMpage : AppCompatActivity() {
         textMessage = findViewById(R.id.message)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
     }
+
+    override fun onBackPressed() {
+        moveTaskToBack(true)
+        finish()
+    }
 }

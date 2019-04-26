@@ -24,6 +24,11 @@ class MainActivity : AppCompatActivity() {
         btn_sign_in.setOnClickListener {
             sign_in()
         }
+
+        reg_text_view.setOnClickListener {
+            val intent = Intent(this, Reg1Page::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun sign_in() {
@@ -40,8 +45,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         if(password_text.text.toString().isEmpty()) {
-            login_text.error = "Please enter password"
-            login_text.requestFocus()
+            password_text.error = "Please enter password"
+            password_text.requestFocus()
             return
         }
 
@@ -76,10 +81,5 @@ class MainActivity : AppCompatActivity() {
         else{
             password_text.text = null
         }
-    }
-
-    fun onClick(view: View) {
-        val intent = Intent(this, Reg1Page::class.java)
-        startActivity(intent)
     }
 }

@@ -21,4 +21,7 @@
     <string name="year">Выберите год поступления</string>
     <string name="spec">Выберите специальность</string>
     <string name="gr">Выберите группу</string>
+    <string name="regpredlogeniye">Еще не зарегистрированы?</string>
+    <string name="inppsw">Введите пароль</string>
+    <string name="telnum_reg">Введите номер телефона</string>
 </resources>
