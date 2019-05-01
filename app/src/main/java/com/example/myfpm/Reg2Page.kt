@@ -21,4 +21,8 @@ class Reg2Page : AppCompatActivity(), AdapterView.OnItemClickListener {
         val intent = Intent(this, MyFPMpage::class.java )
         startActivity(intent)
     }
+
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }
