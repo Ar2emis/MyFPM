@@ -14,18 +14,34 @@ class RegPersonPage : AppCompatActivity() {
         setContentView(R.layout.activity_reg_person_page)
 
         next_button2.setOnClickListener {
-            if(!checkData()) return@setOnClickListener
+            val name: String = name_reg_edit_text.text.toString()
+            val surname: String = surname_reg_edit_text.text.toString()
+            val phone: String = phone_reg_edit_text.text.toString()
+            val email = intent.getStringExtra("email")
+            val password = intent.getStringExtra("password")
+
+            if(!checkData(name, surname, phone)) {
+                Log.d("RegPersonPage", "!!!Invalid data!!!")
+                return@setOnClickListener
+            }
+            else
+                Log.d("RegPersonPage",
+                    "!!!\nName: $name\nSurname: $surname\nPhone: $phone\n!!!")
 
             Log.d("RegPersonPage", "!!!Start Reg2Page!!!")
             val intent = Intent(this, Reg2Page::class.java)
+
+            intent.putExtra("email", email)
+            intent.putExtra("password", password)
+            intent.putExtra("name", name)
+            intent.putExtra("surname", surname)
+            intent.putExtra("phone", phone)
+
             startActivity(intent)
         }
     }
 
-    private fun checkData(): Boolean{
-        val name: String = name_reg_edit_text.text.toString()
-        val surname: String = surname_reg_edit_text.text.toString()
-        val phone: String = phone_reg_edit_text.text.toString()
+    private fun checkData(name: String, surname: String, phone: String): Boolean{
         var isDataCorrect: Boolean = true
 
         if (name.isEmpty()) {
