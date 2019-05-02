@@ -2,24 +2,23 @@ package com.example.myfpm
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.widget.TextView
 
 class MyFPMpage : AppCompatActivity() {
 
-    private lateinit var textMessage: TextView
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_news -> {
-                textMessage.setText(R.string.title_home)
+                replaceFragment(NewsFragment())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_timetable -> {
-                textMessage.setText(R.string.title_dashboard)
+                replaceFragment(TimeTableFragment())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_profile -> {
-                textMessage.setText(R.string.title_notifications)
+                replaceFragment(ProfileFragment())
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -29,10 +28,16 @@ class MyFPMpage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_fpmpage)
+        replaceFragment(NewsFragment())
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
-        textMessage = findViewById(R.id.message)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+    }
+
+    private fun replaceFragment(fragment: Fragment){
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.container, fragment)
+        fragmentTransaction.commit()
     }
 
     override fun onBackPressed() {
