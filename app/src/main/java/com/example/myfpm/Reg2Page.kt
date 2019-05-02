@@ -15,7 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.android.synthetic.main.activity_reg2_page.*
 
-class Reg2Page : AppCompatActivity(), AdapterView.OnItemClickListener {
+class Reg2Page : AppCompatActivity() {
 
     var years: MutableList<String> = mutableListOf("Year")
     var specs: MutableList<String> = mutableListOf("Spec")
@@ -63,8 +63,8 @@ class Reg2Page : AppCompatActivity(), AdapterView.OnItemClickListener {
                     group_reg_text_view.visibility = View.VISIBLE
                     group_reg_spinner.visibility = View.VISIBLE
 
-                    val year = year_reg_spinner.getItemAtPosition(position).toString()
-                    val spec = spec_reg_spinner.getItemAtPosition(position).toString()
+                    val year = year_reg_spinner.selectedItem.toString()
+                    val spec = spec_reg_spinner.selectedItem.toString()
                         .substringAfter('(').substringBefore(')')
                     Log.d("Reg2Page",
                         "!!!$year!!!")
@@ -187,9 +187,5 @@ class Reg2Page : AppCompatActivity(), AdapterView.OnItemClickListener {
         }
 
         return true
-    }
-
-    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-
     }
 }
