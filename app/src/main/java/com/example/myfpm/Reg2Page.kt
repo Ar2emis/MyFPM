@@ -10,7 +10,10 @@ import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.android.synthetic.main.activity_reg2_page.*
@@ -110,60 +113,72 @@ class Reg2Page : AppCompatActivity() {
                     Log.d("Reg2Page", "!!!${it.exception}!!!")
                     return@addOnCompleteListener
                 }
-                else
-                    Log.d("Reg2Page", "!!!" +
-                            "Registration successful\n" +
-                            "User uid: ${it.result?.user?.uid}" +
-                            "!!!")
-                syncDB(name, surname, phone, email, password, it.result!!.user.uid)
+                else {
+                    continueRegistration(it, name, surname, phone, email)
+                }
             }
     }
 
+    private fun continueRegistration(it: Task<AuthResult>, name: String, surname: String,
+                                     phone: String, email: String){
+
+        val uid = it.result!!.user.uid
+
+        FirebaseAuth.getInstance().currentUser!!.sendEmailVerification()
+            .addOnCompleteListener {
+                if (!it.isSuccessful) {
+                    Log.d("EmailVer", "!!!Email did not send!!!")
+                    Toast.makeText(this, "${it.exception}\nEmail did not sent",
+                        Toast.LENGTH_SHORT).show()
+                    return@addOnCompleteListener
+                }
+                else {
+                    Log.d("EmailVer", "!!!Email sent!!!")
+                    Log.d(
+                        "Reg2Page", "!!!" +
+                                "Registration successful\n" +
+                                "User uid: $uid" +
+                                "!!!"
+                    )
+                    syncDB(name, surname, phone, email, uid)
+                }
+            }
+
+    }
+
     private fun syncDB(name: String, surname: String, phone: String,
-                       email: String, password: String, uid: String){
+                       email: String, uid: String){
         val year = year_reg_spinner.selectedItem.toString()
         val spec = spec_reg_spinner.selectedItem.toString()
         val group = group_reg_spinner.selectedItem.toString()
 
-        val userData = HashMap<String, Any>()
-        userData["email"] = email
-        userData["password"] = password
-        userData["uid"] = uid
-
         val studentData = HashMap<String, Any>()
         studentData["name"] = name
         studentData["surname"] = surname
-        studentData["phone"] = phone
-        studentData["email"] = email
         studentData["year"] = year
         studentData["spec"] = spec
         studentData["group"] = group
+        studentData["email"] = email
+        studentData["phone"] = phone
         studentData["uid"] = uid
 
         FirebaseFirestore.getInstance()
-            .collection("users")
-            .document(uid).set(userData)
+            .collection("students")
+            .document(uid).set(studentData)
             .addOnSuccessListener {
 
-                Log.d("Reg2Page/syncBD", "!!!Sync userData is successful!!!")
+                Log.d("Reg2Page/syncBD", "!!!Sync studentData is successful!!!")
 
-                FirebaseFirestore.getInstance()
-                    .collection("students")
-                    .document(uid).set(studentData)
-                    .addOnSuccessListener {
+                val intent = Intent(this, MainActivity::class.java )
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(intent)
 
-                        Log.d("Reg2Page/syncBD", "!!!Sync studentData is successful!!!")
-
-                        val intent = Intent(this, MyFPMpage::class.java )
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                        startActivity(intent)
-
-                    }.addOnFailureListener { Log.d("Reg2Page/syncBD",
-                        "!!!Sync studentData failed: ${it.message}!!!") }
-
-        }.addOnFailureListener {
-            Log.d("Reg2Page/syncBD", "!!!Sync userData failed: ${it.message}!!!")
-        }
+            }.addOnFailureListener {
+                Toast.makeText(this, " ${it.message}\nRegistration failed",
+                    Toast.LENGTH_SHORT).show()
+                Log.d("Reg2Page/syncBD",
+                "!!!Sync studentData failed: ${it.message}!!!")
+            }
     }
 
     private fun checkData(): Boolean{

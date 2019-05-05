@@ -7,7 +7,6 @@ import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -16,8 +15,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        btn_sign_in.setOnClickListener {
-            val email: String = email_login_edit_text.text.toString()
+        sign_in_login_button.setOnClickListener {
+            val email: String = email_forg_pass_edit_text.text.toString()
             val password: String = password_login_edit_text.text.toString()
 
             if(!checkData(email, password)){
@@ -34,20 +33,25 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, Reg1Page::class.java)
             startActivity(intent)
         }
+
+        forgot_password_text_view.setOnClickListener {
+            Log.d("LoginPage", "!!!Start resetting password!!!")
+            val intent = Intent(this, ResetPasswordActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun checkData(email: String, password: String): Boolean{
         var isDataCorrect = true
 
         if(email.isEmpty()) {
-            email_login_edit_text.error = "Please enter login"
-            email_login_edit_text.requestFocus()
+            email_forg_pass_edit_text.error = "Please enter login"
+            email_forg_pass_edit_text.requestFocus()
             isDataCorrect = false
         }
-
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            email_login_edit_text.error = "Please enter valid login"
-            email_login_edit_text.requestFocus()
+        else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            email_forg_pass_edit_text.error = "Please enter valid login"
+            email_forg_pass_edit_text.requestFocus()
             isDataCorrect = false
         }
 
@@ -64,12 +68,18 @@ class MainActivity : AppCompatActivity() {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    val intent = Intent(this, MyFPMpage::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    startActivity(intent)
+                    if(!FirebaseAuth.getInstance().currentUser!!.isEmailVerified){
+                        email_forg_pass_edit_text.error = "Email isn't verified"
+                        email_forg_pass_edit_text.requestFocus()
+                    }
+                    else {
+                        val intent = Intent(this, MyFPMpage::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        startActivity(intent)
+                    }
                 } else {
                     Toast.makeText(
-                        baseContext, "Authentication failed.\n Wrong login or password",
+                        baseContext, "Authentication failed. Wrong email or password",
                         Toast.LENGTH_SHORT
                     ).show()
                     password_login_edit_text.text = null
@@ -80,7 +90,8 @@ class MainActivity : AppCompatActivity() {
     public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
-        if(FirebaseAuth.getInstance().currentUser != null) {
+        if(FirebaseAuth.getInstance().currentUser != null &&
+            FirebaseAuth.getInstance().currentUser!!.isEmailVerified) {
             val intent = Intent(this, MyFPMpage::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)
