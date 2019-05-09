@@ -1,8 +1,12 @@
 package com.example.myfpm
 
+import android.app.Activity
 import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.util.Patterns
 import kotlinx.android.synthetic.main.activity_reg_person_page.*
@@ -39,8 +43,29 @@ class RegPersonPage : AppCompatActivity() {
 
             startActivity(intent)
         }
+
+        upload_new_photo_button.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            startActivityForResult(intent, 0)
+        }
     }
 
+    var selectedPhotoUri: Uri? = null
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null){
+            selectedPhotoUri = data.data
+
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedPhotoUri)
+
+            val bitmapDrawable = BitmapDrawable(bitmap)
+            upload_new_photo_button.setBackgroundDrawable(bitmapDrawable)
+        }
+
+    }
     private fun checkData(name: String, surname: String, phone: String): Boolean{
         var isDataCorrect: Boolean = true
 
