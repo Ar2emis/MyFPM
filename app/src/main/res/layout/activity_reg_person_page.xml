@@ -50,8 +50,9 @@
             android:layout_marginRight="48dp" android:layout_marginEnd="48dp"/>
     <Button
             android:text="Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+
             android:id="@+id/upload_new_photo_button"
             android:layout_marginTop="120dp" app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"

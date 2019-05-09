@@ -40,6 +40,7 @@ class RegPersonPage : AppCompatActivity() {
             intent.putExtra("name", name)
             intent.putExtra("surname", surname)
             intent.putExtra("phone", phone)
+            intent.putExtra("photo", selectedPhotoUri)
 
             startActivity(intent)
         }
@@ -83,18 +84,11 @@ class RegPersonPage : AppCompatActivity() {
             Log.d("RegPersonPage", "!!!Empty surname!!!")
         }
 
-        if (!Patterns.PHONE.matcher(phone).matches()) {
+        if (phone.isNotEmpty() && !Patterns.PHONE.matcher(phone).matches()) {
             phone_reg_edit_text.error = "Please enter valid phone number"
             phone_reg_edit_text.requestFocus()
             isDataCorrect = false
             Log.d("RegPersonPage", "!!!Invalid phone number!!!")
-        }
-
-        if (phone.isEmpty()) {
-            phone_reg_edit_text.error = "Please enter phone number"
-            phone_reg_edit_text.requestFocus()
-            isDataCorrect = false
-            Log.d("RegPersonPage", "!!!Empty phone number!!!")
         }
 
         return isDataCorrect

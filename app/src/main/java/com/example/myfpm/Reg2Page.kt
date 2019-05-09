@@ -1,8 +1,10 @@
 package com.example.myfpm
 
 import android.content.Intent
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -16,7 +18,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_reg2_page.*
+import java.util.*
+import kotlin.collections.HashMap
 
 class Reg2Page : AppCompatActivity() {
 
@@ -103,6 +108,7 @@ class Reg2Page : AppCompatActivity() {
         val phone: String = intent.getStringExtra("phone")
         val email = intent.getStringExtra("email")
         val password = intent.getStringExtra("password")
+        val photo = intent.getParcelableExtra<Uri>("photo")
 
 
         if(!checkData()) return
@@ -114,13 +120,13 @@ class Reg2Page : AppCompatActivity() {
                     return@addOnCompleteListener
                 }
                 else {
-                    continueRegistration(it, name, surname, phone, email)
+                    continueRegistration(it, name, surname, phone, email, photo)
                 }
             }
     }
 
     private fun continueRegistration(it: Task<AuthResult>, name: String, surname: String,
-                                     phone: String, email: String){
+                                     phone: String, email: String, photo: Uri){
 
         val uid = it.result!!.user.uid
 
@@ -140,17 +146,19 @@ class Reg2Page : AppCompatActivity() {
                                 "User uid: $uid" +
                                 "!!!"
                     )
-                    syncDB(name, surname, phone, email, uid)
+                    syncDB(name, surname, phone, email, uid, photo)
                 }
             }
 
     }
 
     private fun syncDB(name: String, surname: String, phone: String,
-                       email: String, uid: String){
+                       email: String, uid: String, photo: Uri?){
+
         val year = year_reg_spinner.selectedItem.toString()
         val spec = spec_reg_spinner.selectedItem.toString()
         val group = group_reg_spinner.selectedItem.toString()
+        val photoFile = UUID.randomUUID().toString()
 
         val studentData = HashMap<String, Any>()
         studentData["name"] = name
@@ -158,9 +166,23 @@ class Reg2Page : AppCompatActivity() {
         studentData["year"] = year
         studentData["spec"] = spec
         studentData["group"] = group
+        studentData["role"] = "student"
         studentData["email"] = email
-        studentData["phone"] = phone
-        studentData["uid"] = uid
+
+        if(phone.isNotEmpty()){
+            studentData["phone"] = phone
+        }
+        else
+        {
+            studentData["phone"] = "null"
+        }
+        if(photo != null) {
+            FirebaseStorage.getInstance().getReference("/images/$photoFile")
+                .putFile(photo)
+            studentData["photoUrl"] = photoFile
+        }
+        else
+            studentData["photoUrl"] = "null"
 
         FirebaseFirestore.getInstance()
             .collection("students")

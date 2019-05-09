@@ -60,7 +60,7 @@ class Reg1Page : AppCompatActivity() {
 
     private fun checkData(email: String, password: String): Boolean{
         var isDataCorrect: Boolean = true
-        val PASSWORD_LENGTH = 8
+        val PASSWORD_LENGTH = 6
 
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             email_reg_edit_text.error = "Please enter valid login"
