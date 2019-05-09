@@ -1,31 +1,54 @@
 package com.example.myfpm
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.fragment_news.*
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- *
- */
 class NewsFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_news, container, false)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+
+        swipeRefreshLayout.setOnRefreshListener {
+            refreshNews();
+        }
+
+        refreshNews();
+
+        recyclerViev_news.layoutManager = LinearLayoutManager(this.context)
+        recyclerViev_news.adapter = NewsAdapter()
+
+        add_news_button.setOnClickListener {
+            val intent = Intent(this.context, New_news::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun refreshNews() {
+        swipeRefreshLayout.isRefreshing = true
+        // Вот тут много кода с обновлением с бд
+        swipeRefreshLayout.isRefreshing =false
     }
 
 
 }
+

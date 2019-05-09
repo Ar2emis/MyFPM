@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.fragment_news.*
 
 class MyFPMpage : AppCompatActivity() {
 
@@ -30,7 +32,6 @@ class MyFPMpage : AppCompatActivity() {
         setContentView(R.layout.activity_my_fpmpage)
         replaceFragment(NewsFragment())
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
-
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
     }
 
