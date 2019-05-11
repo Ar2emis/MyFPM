@@ -1,10 +1,12 @@
 package com.example.myfpm
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_news.*
 
 class MyFPMpage : AppCompatActivity() {
@@ -29,6 +31,9 @@ class MyFPMpage : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        checkUserIsSignIn()
+
         setContentView(R.layout.activity_my_fpmpage)
         replaceFragment(NewsFragment())
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
@@ -39,6 +44,15 @@ class MyFPMpage : AppCompatActivity() {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.container, fragment)
         fragmentTransaction.commit()
+    }
+
+    private fun checkUserIsSignIn(){
+        if(FirebaseAuth.getInstance().currentUser == null &&
+            !FirebaseAuth.getInstance().currentUser!!.isEmailVerified) {
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
+        }
     }
 
     override fun onBackPressed() {

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -15,7 +14,6 @@ import android.widget.Toast
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
@@ -191,7 +189,7 @@ class Reg2Page : AppCompatActivity() {
 
                 Log.d("Reg2Page/syncBD", "!!!Sync studentData is successful!!!")
 
-                val intent = Intent(this, MainActivity::class.java )
+                val intent = Intent(this, LoginActivity::class.java )
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(intent)
 

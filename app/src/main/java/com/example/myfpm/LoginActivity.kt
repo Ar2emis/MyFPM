@@ -7,13 +7,13 @@ import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_login.*
 
-class MainActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_login)
 
         sign_in_login_button.setOnClickListener {
             val email: String = email_forg_pass_edit_text.text.toString()
@@ -85,16 +85,5 @@ class MainActivity : AppCompatActivity() {
                     password_login_edit_text.text = null
                 }
             }
-    }
-
-    public override fun onStart() {
-        super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
-        if(FirebaseAuth.getInstance().currentUser != null &&
-            FirebaseAuth.getInstance().currentUser!!.isEmailVerified) {
-            val intent = Intent(this, MyFPMpage::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            startActivity(intent)
-        }
     }
 }
