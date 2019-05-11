@@ -41,9 +41,9 @@ class NewsFragment : androidx.fragment.app.Fragment() {
 
         recyclerView_news.adapter = adapter
 
-        adapter.add(NewsItem())
-        adapter.add(NewsItem())
-        adapter.add(NewsItem())
+        //adapter.add(NewsItem())
+        //adapter.add(NewsItem())
+        //adapter.add(NewsItem())
 
         fetchNews()
 
@@ -65,7 +65,7 @@ class NewsFragment : androidx.fragment.app.Fragment() {
                         news.addAll(it.result!!.toObjects(News::class.java))
                         lastDoc = it.result!!.documents.last()
                         val adapter = GroupAdapter<ViewHolder>()
-                        adapter.addAll()
+                        //adapter.addAll()
                     }
                 }
         //}
