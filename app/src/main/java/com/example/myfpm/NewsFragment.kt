@@ -13,6 +13,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.fragment_news.*
+import kotlinx.android.synthetic.main.news.view.*
 
 
 private const val ARG_PARAM1 = "param1"
@@ -40,10 +41,6 @@ class NewsFragment : androidx.fragment.app.Fragment() {
         val adapter = GroupAdapter<ViewHolder>()
 
         recyclerView_news.adapter = adapter
-
-        //adapter.add(NewsItem())
-        //adapter.add(NewsItem())
-        //adapter.add(NewsItem())
 
         fetchNews()
 
@@ -85,13 +82,14 @@ class NewsFragment : androidx.fragment.app.Fragment() {
     }
 }
 
-class NewsItem(new: News): Item<ViewHolder>(){
+class NewsItem(val new: News): Item<ViewHolder>(){
     override fun getLayout(): Int {
         return R.layout.news
     }
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
-
+        viewHolder.itemView.user_name_news_text_view.text = new.name
+        viewHolder.itemView.text_news_text_view.text = new.text
     }
 }
 
