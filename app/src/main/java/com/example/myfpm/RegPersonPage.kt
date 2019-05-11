@@ -37,7 +37,7 @@ class RegPersonPage : AppCompatActivity() {
 
             intent.putExtra("email", email)
             intent.putExtra("password", password)
-            intent.putExtra("name", name)
+            intent.putExtra("creatorUid", name)
             intent.putExtra("surname", surname)
             intent.putExtra("phone", phone)
             intent.putExtra("photo", selectedPhotoUri)
@@ -71,10 +71,10 @@ class RegPersonPage : AppCompatActivity() {
         var isDataCorrect = true
 
         if (name.isEmpty()) {
-            name_reg_edit_text.error = "Please enter name"
+            name_reg_edit_text.error = "Please enter creatorUid"
             name_reg_edit_text.requestFocus()
             isDataCorrect = false
-            Log.d("RegPersonPage", "!!!Empty name!!!")
+            Log.d("RegPersonPage", "!!!Empty creatorUid!!!")
         }
 
         if (surname.isEmpty()) {

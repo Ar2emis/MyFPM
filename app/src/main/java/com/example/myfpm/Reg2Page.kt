@@ -92,8 +92,8 @@ class Reg2Page : AppCompatActivity() {
         if(it.isEmpty) return
 
         for(doc in it) {
-            list.add(doc.getString("name")!!)
-            Log.d("Spinner", "\t!!!${doc.getString("name")}!!!")
+            list.add(doc.getString("creatorUid")!!)
+            Log.d("Spinner", "\t!!!${doc.getString("creatorUid")}!!!")
         }
 
         spinner.adapter = ArrayAdapter<String>(this,
@@ -101,7 +101,7 @@ class Reg2Page : AppCompatActivity() {
     }
 
     private fun signUp(){
-        val name: String = intent.getStringExtra("name")
+        val name: String = intent.getStringExtra("creatorUid")
         val surname: String = intent.getStringExtra("surname")
         val phone: String = intent.getStringExtra("phone")
         val email = intent.getStringExtra("email")
@@ -159,7 +159,7 @@ class Reg2Page : AppCompatActivity() {
         val photoFile = UUID.randomUUID().toString()
 
         val studentData = HashMap<String, Any>()
-        studentData["name"] = name
+        studentData["creatorUid"] = name
         studentData["surname"] = surname
         studentData["year"] = year
         studentData["spec"] = spec
