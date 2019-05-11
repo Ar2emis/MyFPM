@@ -1,7 +1,7 @@
 package com.example.myfpm
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.util.Log
@@ -59,7 +59,7 @@ class Reg1Page : AppCompatActivity() {
     }
 
     private fun checkData(email: String, password: String): Boolean{
-        var isDataCorrect: Boolean = true
+        var isDataCorrect = true
         val PASSWORD_LENGTH = 6
 
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {

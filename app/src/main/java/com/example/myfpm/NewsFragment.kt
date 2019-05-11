@@ -3,8 +3,6 @@ package com.example.myfpm
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +12,7 @@ import kotlinx.android.synthetic.main.fragment_news.*
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class NewsFragment : Fragment() {
+class NewsFragment : androidx.fragment.app.Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,13 +26,11 @@ class NewsFragment : Fragment() {
 
 
         swipeRefreshLayout.setOnRefreshListener {
-            refreshNews();
+            refreshNews()
         }
 
-        refreshNews();
-
-        recyclerViev_news.layoutManager = LinearLayoutManager(this.context)
-        recyclerViev_news.adapter = NewsAdapter()
+        //recyclerView_news.layoutManager = LinearLayoutManager(this.context)
+        recyclerView_news.adapter = NewsAdapter()
 
         add_news_button.setOnClickListener {
             val intent = Intent(this.context, New_news::class.java)

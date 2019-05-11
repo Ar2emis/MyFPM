@@ -2,10 +2,10 @@ package com.example.myfpm
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_news.*
 
@@ -47,7 +47,7 @@ class MyFPMpage : AppCompatActivity() {
     }
 
     private fun checkUserIsSignIn(){
-        if(FirebaseAuth.getInstance().currentUser == null &&
+        if(FirebaseAuth.getInstance().currentUser == null ||
             !FirebaseAuth.getInstance().currentUser!!.isEmailVerified) {
             val intent = Intent(this, LoginActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
