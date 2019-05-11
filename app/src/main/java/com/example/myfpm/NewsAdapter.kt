@@ -29,7 +29,3 @@ class NewsAdapter: RecyclerView.Adapter<CustomViewHolder>() {
 class CustomViewHolder(val view: View): RecyclerView.ViewHolder(view) {
 
 }
-
-class News(val name: String, val text: String, val image: Image){
-
-}
