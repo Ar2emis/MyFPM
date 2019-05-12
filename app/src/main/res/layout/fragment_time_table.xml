@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".TimeTableFragment"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".TimeTableFragment">
+    <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            app:tabMode="fixed"
+            app:tabGravity="fill"
+            android:layout_height="?android:attr/actionBarSize">
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager.widget.ViewPager
+            android:layout_width="match_parent"
+            android:id="@+id/viewPagerTimeTable"
+            android:layout_height="match_parent">
+
+    </androidx.viewpager.widget.ViewPager>
+</LinearLayout>
