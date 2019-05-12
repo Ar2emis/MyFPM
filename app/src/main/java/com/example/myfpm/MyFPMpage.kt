@@ -2,6 +2,7 @@ package com.example.myfpm
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
@@ -32,12 +33,19 @@ class MyFPMpage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        checkUserIsSignIn()
-
-        setContentView(R.layout.activity_my_fpmpage)
-        replaceFragment(NewsFragment())
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
-        navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+        if(FirebaseAuth.getInstance().currentUser != null &&
+                    FirebaseAuth.getInstance().currentUser!!.isEmailVerified) {
+            Log.d("User", "!!! ${FirebaseAuth.getInstance().currentUser?.uid} !!!")
+            setContentView(R.layout.activity_my_fpmpage)
+            replaceFragment(NewsFragment())
+            val navView: BottomNavigationView = findViewById(R.id.nav_view)
+            navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+        }
+        else{
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
+        }
     }
 
     private fun replaceFragment(fragment: Fragment){
@@ -46,14 +54,6 @@ class MyFPMpage : AppCompatActivity() {
         fragmentTransaction.commit()
     }
 
-    private fun checkUserIsSignIn(){
-        if(FirebaseAuth.getInstance().currentUser == null ||
-            !FirebaseAuth.getInstance().currentUser!!.isEmailVerified) {
-            val intent = Intent(this, LoginActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            startActivity(intent)
-        }
-    }
 
     override fun onBackPressed() {
         moveTaskToBack(true)

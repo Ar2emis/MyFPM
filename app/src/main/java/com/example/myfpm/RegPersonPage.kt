@@ -10,6 +10,12 @@ import android.provider.MediaStore
 import android.util.Log
 import android.util.Patterns
 import kotlinx.android.synthetic.main.activity_reg_person_page.*
+import android.graphics.BitmapFactory
+import android.graphics.Bitmap
+import com.squareup.picasso.Picasso
+import io.grpc.internal.Stream
+import java.io.OutputStream as OutputStream1
+
 
 class RegPersonPage : AppCompatActivity() {
 
@@ -40,7 +46,6 @@ class RegPersonPage : AppCompatActivity() {
             intent.putExtra("creatorUid", name)
             intent.putExtra("surname", surname)
             intent.putExtra("phone", phone)
-            intent.putExtra("photo", selectedPhotoUri)
 
             startActivity(intent)
         }
@@ -52,21 +57,36 @@ class RegPersonPage : AppCompatActivity() {
         }
     }
 
-    var selectedPhotoUri: Uri? = null
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null){
-            selectedPhotoUri = data.data
+            val selectedPhotoUri = data.data!!
 
-            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedPhotoUri)
+            var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedPhotoUri)
 
-            val bitmapDrawable = BitmapDrawable(bitmap)
-            upload_new_photo_button.setBackgroundDrawable(bitmapDrawable)
+            val height = bitmap.height
+            val width = bitmap.width
+            val scaledDimension = 500
+
+            var dimension = height
+            if(height > width)
+                dimension = width
+
+            bitmap = Bitmap.createBitmap(bitmap,
+                (width - dimension) / 2,
+                (height - dimension) / 2,
+                dimension, dimension)
+
+            bitmap = Bitmap.createScaledBitmap(bitmap, scaledDimension, scaledDimension, false)
+
+            upload_new_photo_button.background = BitmapDrawable(bitmap)
         }
 
     }
+
+
     private fun checkData(name: String, surname: String, phone: String): Boolean{
         var isDataCorrect = true
 

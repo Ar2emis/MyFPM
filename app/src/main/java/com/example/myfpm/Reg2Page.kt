@@ -159,7 +159,7 @@ class Reg2Page : AppCompatActivity() {
         val photoFile = UUID.randomUUID().toString()
 
         val studentData = HashMap<String, Any>()
-        studentData["creatorUid"] = name
+        studentData["name"] = name
         studentData["surname"] = surname
         studentData["year"] = year
         studentData["spec"] = spec
@@ -175,9 +175,9 @@ class Reg2Page : AppCompatActivity() {
             studentData["phone"] = "null"
         }
         if(photo != null) {
-            FirebaseStorage.getInstance().getReference("/images/$photoFile")
-                .putFile(photo)
-            studentData["photoUrl"] = photoFile
+            val ref = FirebaseStorage.getInstance().getReference("/images/$photoFile")
+                ref.putFile(photo)
+            studentData["photoUrl"] = ref
         }
         else
             studentData["photoUrl"] = "null"

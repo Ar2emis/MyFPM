@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
@@ -39,10 +40,6 @@ class NewsFragment : androidx.fragment.app.Fragment() {
             refreshNews()
         }
 
-        //val adapter = GroupAdapter<ViewHolder>()
-
-        //recyclerView_news.adapter = adapter
-
         fetchNews()
 
         add_news_button.setOnClickListener {
@@ -51,12 +48,11 @@ class NewsFragment : androidx.fragment.app.Fragment() {
         }
     }
 
-    private lateinit var lastDoc: DocumentSnapshot
+    private var lastDoc: DocumentSnapshot? = null
+    private val newsLimit: Long = 10
 
     private fun fetchNews(){
-        val newsLimit: Long = 10
-        //if(!lastDoc.exists()){
-        if(FirebaseAuth.getInstance().currentUser != null)
+        if(lastDoc == null){
             FirebaseFirestore.getInstance()
                 .collection("news").limit(newsLimit).get()
                 .addOnCompleteListener {
@@ -72,14 +68,24 @@ class NewsFragment : androidx.fragment.app.Fragment() {
                         recyclerView_news.adapter = adapter
                     }
                 }
-        //}
-        //else {
-//            FirebaseFirestore.getInstance()
-//                .collection("news").limit(newsLimit).startAfter().get()
-//                .addOnCompleteListener {
-//
-//                }
-        //}
+        }
+        else {
+            FirebaseFirestore.getInstance()
+                .collection("news").limit(newsLimit).startAfter(lastDoc!!).get()
+               .addOnCompleteListener {
+                   if(!it.result!!.isEmpty) {
+                       news.addAll(it.result!!.toObjects(News::class.java))
+                       lastDoc = it.result!!.documents.last()
+                       val adapter = GroupAdapter<ViewHolder>()
+
+                       for(new in news){
+                           adapter.add(NewsItem(new))
+                       }
+
+                       recyclerView_news.adapter = adapter
+                   }
+                }
+        }
     }
 
     private fun refreshNews() {
@@ -89,14 +95,32 @@ class NewsFragment : androidx.fragment.app.Fragment() {
     }
 }
 
-class NewsItem(val new: News): Item<ViewHolder>(){
+class NewsItem(private val new: News): Item<ViewHolder>(){
     override fun getLayout(): Int {
         return R.layout.news
     }
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.itemView.user_name_news_text_view.text = new.creatorUid
-        viewHolder.itemView.text_news_text_view.text = new.text
+        FirebaseFirestore.getInstance().document("students/${new.creatorUid}")
+            .get().addOnCompleteListener {
+                if (!it.isSuccessful) return@addOnCompleteListener
+
+                val userName = it.result!!.getString("name") +
+                        " " + it.result!!.getString("surname")
+                val date = "${new.date.hours}:${new.date.minutes}" +
+                        "${new.date.date}.${new.date.month}.${new.date.year} "
+
+                viewHolder.itemView.user_name_news_text_view.text = userName
+                viewHolder.itemView.text_news_text_view.text = new.text
+                viewHolder.itemView.date_news_text_view.text = date
+
+                Picasso.get().load(new.imageUrl)
+                    .into(viewHolder.itemView.image_news_image_view)
+                Picasso.get().load(it.result!!.getString("photoUrl"))
+                    .fit().into(viewHolder.itemView.user_image_news_image_view)
+
+                viewHolder.itemView.visibility = View.VISIBLE
+            }
     }
 }
 
