@@ -107,8 +107,12 @@ class NewsItem(private val new: News): Item<ViewHolder>(){
 
                 val userName = it.result!!.getString("name") +
                         " " + it.result!!.getString("surname")
-                val date = "${new.date.hours}:${new.date.minutes}" +
-                        "${new.date.date}.${new.date.month}.${new.date.year} "
+                val date =
+                    "${new.date.hours}:" +
+                            "${new.date.minutes}  " +
+                            "${new.date.date}." +
+                            "${new.date.month + 1}." +
+                            "${new.date.year + 1900}"
 
                 viewHolder.itemView.user_name_news_text_view.text = userName
                 viewHolder.itemView.text_news_text_view.text = new.text

@@ -23,11 +23,11 @@ class TimeTableFragment : androidx.fragment.app.Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val adapter = MyViewPagerAdapter(activity?.supportFragmentManager!!)
-        adapter.addFragment(MondayFragment(), "Monday")
-        adapter.addFragment(TuesdayFragment(), "Tuesday")
-        adapter.addFragment(WednesdayFragment(), "Wednesday")
-        adapter.addFragment(ThursdayFragment(), "Thursday")
-        adapter.addFragment(FridayFragment(), "Friday")
+//        adapter.addFragment(MondayFragment(), "Monday")
+//        adapter.addFragment(TuesdayFragment(), "Tuesday")
+//        adapter.addFragment(WednesdayFragment(), "Wednesday")
+//        adapter.addFragment(ThursdayFragment(), "Thursday")
+//        adapter.addFragment(FridayFragment(), "Friday")
         viewPagerTimeTable.adapter = adapter
         tabs.setupWithViewPager(viewPagerTimeTable)
     }
