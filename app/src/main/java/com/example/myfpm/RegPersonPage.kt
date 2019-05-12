@@ -51,8 +51,8 @@ class RegPersonPage : AppCompatActivity() {
         }
 
         upload_new_photo_button.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
+                val intent = Intent(Intent.ACTION_PICK)
+                intent.type = "image/*"
             startActivityForResult(intent, 0)
         }
     }

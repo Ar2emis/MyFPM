@@ -1,11 +1,11 @@
 package com.example.myfpm
 
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import com.google.firebase.auth.FirebaseAuth
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -27,5 +27,27 @@ class ProfileFragment : androidx.fragment.app.Fragment() {
         return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId){
+            R.id.singOut_butt -> {
+                FirebaseAuth.getInstance().signOut()
+                val intent = Intent(this.context,LoginActivity::class.java)
+                intent.flags =Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.profmenu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 
 }
