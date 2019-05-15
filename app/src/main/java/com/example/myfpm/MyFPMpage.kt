@@ -3,6 +3,7 @@ package com.example.myfpm
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.ActionBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
@@ -33,6 +34,8 @@ class MyFPMpage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        getSupportActionBar()?.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM)
+        getSupportActionBar()?.setCustomView(R.layout.action_bar)
         if(FirebaseAuth.getInstance().currentUser != null &&
                     FirebaseAuth.getInstance().currentUser!!.isEmailVerified) {
             Log.d("User", "!!! ${FirebaseAuth.getInstance().currentUser?.uid} !!!")

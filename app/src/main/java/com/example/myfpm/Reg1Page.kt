@@ -7,6 +7,7 @@ import android.text.Editable
 import android.util.Log
 import android.util.Patterns
 import android.widget.EditText
+import androidx.appcompat.app.ActionBar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.SignInMethodQueryResult
 import com.google.firebase.firestore.FirebaseFirestore
@@ -18,6 +19,8 @@ class Reg1Page : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        getSupportActionBar()?.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM)
+        getSupportActionBar()?.setCustomView(R.layout.action_bar)
         setContentView(R.layout.activity_reg1_page)
 
         next_button1.setOnClickListener {

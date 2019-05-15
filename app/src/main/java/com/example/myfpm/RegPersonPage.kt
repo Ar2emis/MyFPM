@@ -12,6 +12,7 @@ import android.util.Patterns
 import kotlinx.android.synthetic.main.activity_reg_person_page.*
 import android.graphics.BitmapFactory
 import android.graphics.Bitmap
+import androidx.appcompat.app.ActionBar
 import com.squareup.picasso.Picasso
 import io.grpc.internal.Stream
 import java.io.OutputStream as OutputStream1
@@ -22,6 +23,9 @@ class RegPersonPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reg_person_page)
+
+        getSupportActionBar()?.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM)
+        getSupportActionBar()?.setCustomView(R.layout.action_bar)
 
         next_button2.setOnClickListener {
             val name: String = name_reg_edit_text.text.toString()

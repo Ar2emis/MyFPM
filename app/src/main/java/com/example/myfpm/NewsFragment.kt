@@ -3,9 +3,7 @@ package com.example.myfpm
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -34,7 +32,7 @@ class NewsFragment : androidx.fragment.app.Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        setHasOptionsMenu(true)
 
         swipeRefreshLayout.setOnRefreshListener {
             refreshNews()
@@ -46,6 +44,18 @@ class NewsFragment : androidx.fragment.app.Fragment() {
             val intent = Intent(this.context, New_news::class.java)
             startActivity(intent)
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId){
+            R.id.singOut_butt -> {
+                FirebaseAuth.getInstance().signOut()
+                val intent = Intent(this.context,LoginActivity::class.java)
+                intent.flags =Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private var lastDoc: DocumentSnapshot? = null
@@ -92,6 +102,11 @@ class NewsFragment : androidx.fragment.app.Fragment() {
         swipeRefreshLayout.isRefreshing = true
         // Вот тут много кода с обновлением с бд
         swipeRefreshLayout.isRefreshing =false
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.profmenu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 }
 
