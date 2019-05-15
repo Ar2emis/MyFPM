@@ -23,7 +23,7 @@ private const val ARG_PARAM2 = "param2"
 
 class NewsFragment : androidx.fragment.app.Fragment() {
 
-    var news: MutableList<News> = mutableListOf()
+     var news: MutableList<News> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,7 +39,7 @@ class NewsFragment : androidx.fragment.app.Fragment() {
         swipeRefreshLayout.setOnRefreshListener {
             refreshNews()
         }
-
+        load_more_butt.visibility =View.INVISIBLE
         fetchNews()
 
         add_news_button.setOnClickListener {
@@ -61,9 +61,9 @@ class NewsFragment : androidx.fragment.app.Fragment() {
                         lastDoc = it.result!!.documents.last()
                         val adapter = GroupAdapter<ViewHolder>()
 
-                        for(new in news){
-                            adapter.add(NewsItem(new))
+                        for(new in news){adapter.add(NewsItem(new))
                         }
+
 
                         recyclerView_news.adapter = adapter
                     }
@@ -76,8 +76,8 @@ class NewsFragment : androidx.fragment.app.Fragment() {
                    if(!it.result!!.isEmpty) {
                        news.addAll(it.result!!.toObjects(News::class.java))
                        lastDoc = it.result!!.documents.last()
+                       load_more_butt.visibility =View.VISIBLE
                        val adapter = GroupAdapter<ViewHolder>()
-
                        for(new in news){
                            adapter.add(NewsItem(new))
                        }
@@ -126,7 +126,7 @@ class NewsItem(private val new: News): Item<ViewHolder>(){
 
 class News(val creatorUid: String, val date: Date, val imageUrl: String,
            val text: String){
-    constructor(): this("", Date(1, 1, 1, 1 ,1, 1)
+    constructor(): this("", Date(1, 1, 1, 1 ,1)
         , "", "")
 }
 
