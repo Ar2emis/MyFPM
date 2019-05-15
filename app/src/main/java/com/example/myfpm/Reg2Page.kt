@@ -119,17 +119,33 @@ class Reg2Page : AppCompatActivity() {
                     Log.d("Reg2Page", "!!!${it.exception}!!!")
                     return@addOnCompleteListener
                 }
-                else
-                    Log.d("Reg2Page", "!!!" +
-                            "Registration successful\n" +
-                            "User uid: ${it.result?.user?.uid}" +
-                            "!!!")
-                syncDB(name, surname, phone, email, imageUri, it.result?.user?.uid!!)
+                else {
+                    Log.d(
+                        "Reg2Page", "!!!" +
+                                "Registration successful\n" +
+                                "User uid: ${it.result?.user?.uid}" +
+                                "!!!"
+                    )
+
+                    sendVerification(name, surname, phone, email, imageUri)
+                }
             }
     }
 
+    private fun sendVerification(name: String, surname: String, phone: String,
+                                 email: String, imageUri: Uri?){
+        FirebaseAuth.getInstance().currentUser!!.sendEmailVerification().addOnCompleteListener {
+            if(!it.isSuccessful){
+                FirebaseAuth.getInstance().currentUser!!.delete()
+                return@addOnCompleteListener
+            }
+        }
+
+        syncDB(name, surname, phone, email, imageUri, FirebaseAuth.getInstance().currentUser!!.uid)
+    }
+
     private fun syncDB(name: String, surname: String, phone: String,
-                       email: String, imageUri: Uri, uid: String){
+                       email: String, imageUri: Uri?, uid: String){
         val year = year_reg_spinner.selectedItem.toString()
         val spec = spec_reg_spinner.selectedItem.toString()
         val group = group_reg_spinner.selectedItem.toString()
@@ -144,9 +160,29 @@ class Reg2Page : AppCompatActivity() {
         studentData["spec"] = spec
         studentData["group"] = group
 
-        val ref = FirebaseStorage.getInstance().getReference("images/$imageFileName")
-        ref.putFile(imageUri)
-        studentData["imageUrl"] = ref.toString()
+        if(imageUri != null) {
+            val ref = FirebaseStorage.getInstance()
+                .getReference("/images/$imageFileName")
+            ref.putFile(imageUri)
+                .addOnSuccessListener {
+
+                ref.downloadUrl.addOnSuccessListener {
+                    studentData["imageUrl"] = it.toString()
+
+                    pushToFirebase(uid, studentData)
+                }
+            }
+        }
+        else{
+            studentData["imageUrl"] = "null"
+
+            pushToFirebase(uid, studentData)
+        }
+
+
+    }
+
+    private fun pushToFirebase(uid: String, studentData: HashMap<String, Any>){
 
         FirebaseFirestore.getInstance()
             .collection("students")
@@ -159,8 +195,10 @@ class Reg2Page : AppCompatActivity() {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(intent)
 
-            }.addOnFailureListener { Log.d("Reg2Page/syncBD",
-                "!!!Sync studentData failed: ${it.message}!!!") }
+            }.addOnFailureListener {
+                FirebaseAuth.getInstance().currentUser?.delete()
+                Log.d("Reg2Page/syncBD",
+                    "!!!Sync studentData failed: ${it.message}!!!") }
     }
 
     private fun checkData(): Boolean{

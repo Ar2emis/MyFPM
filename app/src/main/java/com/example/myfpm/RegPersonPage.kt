@@ -1,16 +1,16 @@
 package com.example.myfpm
 
+import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.util.Patterns
 import kotlinx.android.synthetic.main.activity_reg_person_page.*
-import android.graphics.BitmapFactory
 import android.graphics.Bitmap
 import androidx.appcompat.app.ActionBar
 import com.squareup.picasso.Picasso
@@ -44,6 +44,7 @@ class RegPersonPage : AppCompatActivity() {
 
             Log.d("RegPersonPage", "!!!Start Reg2Page!!!")
             val intent = Intent(this, Reg2Page::class.java)
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
             intent.putExtra("name", name)
             intent.putExtra("email", email)
@@ -57,9 +58,11 @@ class RegPersonPage : AppCompatActivity() {
         }
 
         upload_new_photo_button.setOnClickListener {
-                val intent = Intent(Intent.ACTION_PICK)
-                intent.type = "image/*"
+
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
             startActivityForResult(intent, 0)
+
         }
     }
 
@@ -71,11 +74,10 @@ class RegPersonPage : AppCompatActivity() {
         if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null){
             selectedPhotoUri = data.data!!
 
-            var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedPhotoUri)
+            var bitmap = ImageDesigner().handleSamplingAndRotationBitmap(this, selectedPhotoUri!!)
 
-            val height = bitmap.height
+            val height = bitmap!!.height
             val width = bitmap.width
-            val scaledDimension = 500
 
             var dimension = height
             if(height > width)
@@ -86,13 +88,10 @@ class RegPersonPage : AppCompatActivity() {
                 (height - dimension) / 2,
                 dimension, dimension)
 
-            bitmap = Bitmap.createScaledBitmap(bitmap, scaledDimension, scaledDimension, false)
-
             upload_new_photo_button.background = BitmapDrawable(bitmap)
         }
 
     }
-
 
     private fun checkData(name: String, surname: String, phone: String): Boolean{
         var isDataCorrect = true

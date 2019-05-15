@@ -5,12 +5,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import com.google.firebase.auth.FirebaseAuth
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
+import io.grpc.Context
 import kotlinx.android.synthetic.main.fragment_news.*
 import kotlinx.android.synthetic.main.news.view.*
 import java.util.*
@@ -21,7 +27,8 @@ private const val ARG_PARAM2 = "param2"
 
 class NewsFragment : androidx.fragment.app.Fragment() {
 
-     var news: MutableList<News> = mutableListOf()
+    var news: MutableList<News> = mutableListOf()
+    lateinit var recyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,10 +41,12 @@ class NewsFragment : androidx.fragment.app.Fragment() {
         super.onActivityCreated(savedInstanceState)
         setHasOptionsMenu(true)
 
+        recyclerView = recyclerView_news
+
         swipeRefreshLayout.setOnRefreshListener {
             refreshNews()
         }
-        load_more_butt.visibility =View.INVISIBLE
+
         fetchNews()
 
         add_news_button.setOnClickListener {
@@ -59,48 +68,63 @@ class NewsFragment : androidx.fragment.app.Fragment() {
     }
 
     private var lastDoc: DocumentSnapshot? = null
-    private val newsLimit: Long = 10
+    private val newsLimit: Long = 2
 
-    private fun fetchNews(){
+    fun fetchNews(){
+        val newsSize = news.size
+
         if(lastDoc == null){
             FirebaseFirestore.getInstance()
                 .collection("news").limit(newsLimit).get()
                 .addOnCompleteListener {
-                    if(!it.result!!.isEmpty) {
-                        news.addAll(it.result!!.toObjects(News::class.java))
-                        lastDoc = it.result!!.documents.last()
-                        val adapter = GroupAdapter<ViewHolder>()
 
-                        for(new in news){adapter.add(NewsItem(new))
-                        }
+                    if(it.result!!.isEmpty) return@addOnCompleteListener
 
+                    news.addAll(it.result!!.toObjects(News::class.java))
+                    lastDoc = it.result!!.documents.last()
 
-                        recyclerView_news.adapter = adapter
+                    Log.d("News", "!!! ${news[0].imageUrl}")
+
+                    val adapter = GroupAdapter<ViewHolder>()
+
+                    for(new in news.asReversed()){
+                        adapter.add(NewsItem(new, news.size, this))
                     }
+
+                    recyclerView.adapter = adapter
                 }
         }
         else {
             FirebaseFirestore.getInstance()
                 .collection("news").limit(newsLimit).startAfter(lastDoc!!).get()
                .addOnCompleteListener {
-                   if(!it.result!!.isEmpty) {
-                       news.addAll(it.result!!.toObjects(News::class.java))
-                       lastDoc = it.result!!.documents.last()
-                       load_more_butt.visibility =View.VISIBLE
-                       val adapter = GroupAdapter<ViewHolder>()
-                       for(new in news){
-                           adapter.add(NewsItem(new))
-                       }
 
-                       recyclerView_news.adapter = adapter
+                   if(it.result!!.isEmpty) return@addOnCompleteListener
+
+                   news.addAll(it.result!!.toObjects(News::class.java))
+                   lastDoc = it.result!!.documents.last()
+
+                   Log.d("News", "!!! ${news[0].imageUrl}")
+
+                   val adapter = GroupAdapter<ViewHolder>()
+
+                   for(new in news.asReversed()){
+                       adapter.add(NewsItem(new,  news.size, this))
                    }
+
+                   recyclerView.adapter = adapter
+                   recyclerView.scrollToPosition(newsSize - 1)
                 }
         }
     }
 
     private fun refreshNews() {
         swipeRefreshLayout.isRefreshing = true
-        // Вот тут много кода с обновлением с бд
+
+        news = mutableListOf()
+        lastDoc = null
+        fetchNews()
+
         swipeRefreshLayout.isRefreshing =false
     }
 
@@ -110,24 +134,29 @@ class NewsFragment : androidx.fragment.app.Fragment() {
     }
 }
 
-class NewsItem(private val new: News): Item<ViewHolder>(){
+class NewsItem(private val new: News, private val size: Int,
+               private val fragment: NewsFragment): Item<ViewHolder>(){
+
     override fun getLayout(): Int {
         return R.layout.news
     }
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
+        initializeNew(viewHolder, position, size)
+    }
+
+    private fun initializeNew(viewHolder: ViewHolder, position: Int, size: Int){
         FirebaseFirestore.getInstance().document("students/${new.creatorUid}")
             .get().addOnCompleteListener {
                 if (!it.isSuccessful) return@addOnCompleteListener
 
                 val userName = it.result!!.getString("name") +
                         " " + it.result!!.getString("surname")
-                val date =
-                    "${new.date.hours}:" +
-                            "${new.date.minutes}  " +
-                            "${new.date.date}." +
-                            "${new.date.month + 1}." +
-                            "${new.date.year + 1900}"
+                val date = "${new.date.hours}:" +
+                        "${new.date.minutes}    " +
+                        "${new.date.date}." +
+                        "${new.date.month + 1}." +
+                        "${new.date.year + 1900}"
 
                 viewHolder.itemView.user_name_news_text_view.text = userName
                 viewHolder.itemView.text_news_text_view.text = new.text
@@ -135,17 +164,28 @@ class NewsItem(private val new: News): Item<ViewHolder>(){
 
                 Picasso.get().load(new.imageUrl)
                     .into(viewHolder.itemView.image_news_image_view)
-                Picasso.get().load(it.result!!.getString("photoUrl"))
+                Picasso.get().load(it.result!!.getString("imageUrl"))
                     .fit().into(viewHolder.itemView.user_image_news_image_view)
 
                 viewHolder.itemView.visibility = View.VISIBLE
+
+                if(position == size - 1) {
+                    viewHolder.itemView.load_more_new_text_view.visibility = View.VISIBLE
+                    viewHolder.itemView.load_more_new_text_view.setOnClickListener {
+                        fragment.fetchNews()
+                        viewHolder.itemView.load_more_new_text_view.visibility = View.GONE
+                    }
+                }
+                else {
+                    viewHolder.itemView.load_more_new_text_view.visibility = View.GONE
+                }
             }
     }
 }
 
-class News(val creatorUid: String, val date: Date, val imageUrl: String,
+class News(val newUUID: String, val creatorUid: String, val date: Date, val imageUrl: String,
            val text: String){
-    constructor(): this("", Date(1, 1, 1, 1 ,1)
-        , "", "")
+    constructor(): this("","",
+        Date(1, 1, 1, 1, 1), "", "")
 }
 
