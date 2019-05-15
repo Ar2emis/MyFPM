@@ -41,11 +41,13 @@ class RegPersonPage : AppCompatActivity() {
             Log.d("RegPersonPage", "!!!Start Reg2Page!!!")
             val intent = Intent(this, Reg2Page::class.java)
 
+            intent.putExtra("name", name)
             intent.putExtra("email", email)
             intent.putExtra("password", password)
             intent.putExtra("creatorUid", name)
             intent.putExtra("surname", surname)
             intent.putExtra("phone", phone)
+            intent.putExtra("imageUri", selectedPhotoUri)
 
             startActivity(intent)
         }
@@ -57,12 +59,13 @@ class RegPersonPage : AppCompatActivity() {
         }
     }
 
+    var selectedPhotoUri: Uri? = null
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null){
-            val selectedPhotoUri = data.data!!
+            selectedPhotoUri = data.data!!
 
             var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedPhotoUri)
 
