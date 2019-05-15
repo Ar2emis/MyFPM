@@ -28,6 +28,7 @@ class TimeTableFragment : androidx.fragment.app.Fragment() {
 
         val adapter = GroupAdapter<ViewHolder>()
         rec_view_time_table.adapter = adapter
+        //Хз чо дальше
 
     }
 }
