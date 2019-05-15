@@ -60,8 +60,8 @@ android:background="@color/colorBackGround">
             android:layout_width="match_parent" android:layout_marginLeft="48dp" android:layout_marginStart="48dp"
             android:layout_marginRight="48dp" android:layout_marginEnd="48dp"/>
     <Button
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="190dp"
+            android:layout_height="190dp"
             android:id="@+id/upload_new_photo_button"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginEnd="8dp" android:layout_marginRight="8dp"
