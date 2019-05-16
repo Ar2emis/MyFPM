@@ -50,9 +50,20 @@ class New_news : AppCompatActivity() {
                 localDate.hours, localDate.minutes)
 
             if(selectedPhotoUri != null){
+
+                val bmp = ImageDesigner()
+                    .handleSamplingAndRotationBitmap(this, selectedPhotoUri!!)
+
+                if(bmp == null){
+                    imageUrl = "null"
+                    pushToFirebase(newsUUID, userUid, date, imageUrl, text)
+                }
+
+                val file = ImageDesigner().saveBitmap(bmp!!)
+
                 val ref = FirebaseStorage.getInstance()
                     .getReference("/images/$imageFileName")
-                ref.putFile(selectedPhotoUri!!).addOnSuccessListener {
+                ref.putFile(Uri.fromFile(file)).addOnSuccessListener {
                     ref.downloadUrl.addOnSuccessListener {
 
                         imageUrl = it.toString()
@@ -63,7 +74,6 @@ class New_news : AppCompatActivity() {
             }
             else {
                 imageUrl = "null"
-
                 pushToFirebase(newsUUID, userUid, date, imageUrl, text)
             }
         }

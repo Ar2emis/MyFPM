@@ -7,12 +7,17 @@ import android.graphics.Matrix
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
+import android.util.Log
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
 
 class ImageDesigner{
 
     fun handleSamplingAndRotationBitmap(context: Context, selectedImage: Uri): Bitmap? {
-        val MAX_HEIGHT = 1024
-        val MAX_WIDTH = 1024
+        val MAX_HEIGHT = 512
+        val MAX_WIDTH = 512
 
         // First decode with inJustDecodeBounds=true to check dimensions
         val options = BitmapFactory.Options()
@@ -93,5 +98,19 @@ class ImageDesigner{
         val rotatedImg = Bitmap.createBitmap(img, 0, 0, img.width, img.height, matrix, true)
         img.recycle()
         return rotatedImg
+    }
+
+    fun saveBitmap(bmp: Bitmap): File {
+        var outStream: OutputStream?
+
+        var file = File.createTempFile("bmp", ".png")
+
+        outStream = FileOutputStream(file)
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, outStream)
+        outStream.flush()
+        outStream.close()
+
+        Log.e("file", "" + file)
+        return file
     }
 }

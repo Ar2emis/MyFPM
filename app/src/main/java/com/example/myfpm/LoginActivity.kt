@@ -24,7 +24,7 @@ class LoginActivity : AppCompatActivity() {
         getSupportActionBar()?.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM)
         getSupportActionBar()?.setCustomView(R.layout.action_bar)
 
-        checkAndAskPermissions()
+        //checkAndAskPermissions()
 
         sign_in_login_button.setOnClickListener {
             val email: String = email_forg_pass_edit_text.text.toString()
@@ -53,13 +53,12 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun checkAndAskPermissions(){
-        val PERMISSION_ALL = 0
+        val PERMISSION_ALL = 2
         val PERMISSIONS = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE)
         if(!hasPermissions(this, PERMISSIONS))
         { ActivityCompat.requestPermissions(this,
-            PERMISSIONS,
-            PERMISSION_ALL)
+            PERMISSIONS, PERMISSION_ALL)
         }
     }
 

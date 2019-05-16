@@ -45,6 +45,7 @@ class NewsFragment : androidx.fragment.app.Fragment() {
         setHasOptionsMenu(true)
 
         recyclerView = recyclerView_news
+        recyclerView.adapter = GroupAdapter<ViewHolder>()
 
         swipeRefreshLayout.setOnRefreshListener {
             refreshNews()
@@ -169,7 +170,8 @@ class NewsItem(private val new: News, private val size: Int,
                 Picasso.get().load(new.imageUrl)
                     .into(viewHolder.itemView.image_news_image_view)
                 Picasso.get().load(it.result!!.getString("imageUrl"))
-                    .fit().into(viewHolder.itemView.user_image_news_image_view)
+                    .centerCrop().resize(128, 128)
+                    .into(viewHolder.itemView.user_image_news_image_view)
 
                 viewHolder.itemView.visibility = View.VISIBLE
 

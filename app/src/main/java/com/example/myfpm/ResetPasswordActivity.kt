@@ -23,6 +23,13 @@ class ResetPasswordActivity : AppCompatActivity() {
         reset_password_forg_pass_button.setOnClickListener {
             val email = email_forg_pass_edit_text.text.toString().trim()
 
+            if(email.isEmpty()) {
+                Log.d("ResetPasswordPage", "!!!Invalid email: $email !!!")
+                email_forg_pass_edit_text.error = "Invalid email"
+                email_forg_pass_edit_text.requestFocus()
+                return@setOnClickListener
+            }
+
             FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email)
                 .addOnSuccessListener {
                     checkUser(it ,email)
@@ -31,27 +38,28 @@ class ResetPasswordActivity : AppCompatActivity() {
     }
 
     private fun checkUser(it: SignInMethodQueryResult, email: String){
+
         if(it.signInMethods.isNullOrEmpty()){
             Log.d("ResetPasswordPage", "!!!Email not already in use: $email!!!")
             email_forg_pass_edit_text.error = "Email not already in use"
             email_forg_pass_edit_text.requestFocus()
             return
         }
-        else {
-            FirebaseAuth.getInstance().sendPasswordResetEmail(email)
-                .addOnCompleteListener {
-                    if(!it.isSuccessful){
-                        Toast.makeText(this, "${it.exception}\nResetting email did not send",
-                            Toast.LENGTH_SHORT).show()
-                        Log.d("ResetPassword", "!!!Resetting email did not send!!!")
-                        return@addOnCompleteListener
-                    }
-                    else {
-                        Toast.makeText(this, "Resetting email sent",
-                            Toast.LENGTH_SHORT).show()
-                        Log.d("ResetPassword", "!!!Resetting email sent!!!")
-                    }
+
+        FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+            .addOnCompleteListener {
+                if(!it.isSuccessful){
+                    Toast.makeText(this, "${it.exception}\nResetting email did not send",
+                        Toast.LENGTH_SHORT).show()
+                    Log.d("ResetPassword", "!!!Resetting email did not send!!!")
+                    return@addOnCompleteListener
                 }
-        }
+                else {
+                    Toast.makeText(this, "Resetting email sent",
+                        Toast.LENGTH_SHORT).show()
+                    Log.d("ResetPassword", "!!!Resetting email sent!!!")
+                }
+            }
+
     }
 }

@@ -1,7 +1,6 @@
 package com.example.myfpm
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -19,6 +18,16 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_reg2_page.*
 import java.util.*
 import kotlin.collections.HashMap
+import com.google.common.io.Flushables.flush
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.os.Environment
+import android.os.Environment.getExternalStorageDirectory
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
+
 
 class Reg2Page : AppCompatActivity() {
 
@@ -108,8 +117,6 @@ class Reg2Page : AppCompatActivity() {
         val phone: String = intent.getStringExtra("phone")
         val email = intent.getStringExtra("email")
         val password= intent.getStringExtra("password")
-        var imageUri = null
-
 
         if(!checkData()) return
 
@@ -127,13 +134,13 @@ class Reg2Page : AppCompatActivity() {
                                 "!!!"
                     )
 
-                    sendVerification(name, surname, phone, email, imageUri)
+                    sendVerification(name, surname, phone, email)
                 }
             }
     }
 
     private fun sendVerification(name: String, surname: String, phone: String,
-                                 email: String, imageUri: Uri?){
+                                 email: String){
         FirebaseAuth.getInstance().currentUser!!.sendEmailVerification().addOnCompleteListener {
             if(!it.isSuccessful){
                 FirebaseAuth.getInstance().currentUser!!.delete()
@@ -141,11 +148,11 @@ class Reg2Page : AppCompatActivity() {
             }
         }
 
-        syncDB(name, surname, phone, email, imageUri, FirebaseAuth.getInstance().currentUser!!.uid)
+        syncDB(name, surname, phone, email, FirebaseAuth.getInstance().currentUser!!.uid)
     }
 
     private fun syncDB(name: String, surname: String, phone: String,
-                       email: String, imageUri: Uri?, uid: String){
+                       email: String, uid: String){
         val year = year_reg_spinner.selectedItem.toString()
         val spec = spec_reg_spinner.selectedItem.toString()
         val group = group_reg_spinner.selectedItem.toString()
@@ -162,16 +169,30 @@ class Reg2Page : AppCompatActivity() {
         studentData["group"] = group
 
         if(imageUri != null) {
-            val ref = FirebaseStorage.getInstance()
-                .getReference("/images/$imageFileName")
-            ref.putFile(imageUri)
-                .addOnSuccessListener {
+            val bmp = ImageDesigner().handleSamplingAndRotationBitmap(this, imageUri)
 
-                ref.downloadUrl.addOnSuccessListener {
-                    studentData["imageUrl"] = it.toString()
+            if(bmp != null) {
+                val file = ImageDesigner().saveBitmap(bmp)
 
-                    pushToFirebase(uid, studentData)
-                }
+                val ref = FirebaseStorage.getInstance()
+                    .getReference("/images/$imageFileName")
+                ref.putFile(Uri.fromFile(file))
+                    .addOnSuccessListener {
+
+                        file.delete()
+
+                        ref.downloadUrl.addOnSuccessListener {
+
+                            studentData["imageUrl"] = it.toString()
+
+                            pushToFirebase(uid, studentData)
+                        }
+                    }
+            }
+            else{
+                Log.d("ImageConverting", "Error")
+                studentData["imageUrl"] = "null"
+                pushToFirebase(uid, studentData)
             }
         }
         else{

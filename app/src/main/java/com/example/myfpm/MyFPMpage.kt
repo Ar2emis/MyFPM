@@ -41,6 +41,15 @@ class MyFPMpage : AppCompatActivity() {
         getSupportActionBar()?.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM)
         getSupportActionBar()?.setCustomView(R.layout.action_bar)
 
+        checkUser()
+
+        setContentView(R.layout.activity_my_fpmpage)
+        replaceFragment(NewsFragment())
+        val navView: BottomNavigationView = findViewById(R.id.nav_view)
+        navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+    }
+
+    private fun checkUser(){
         FirebaseAuth.getInstance().addAuthStateListener {
 
             var isUserLogged = true
@@ -55,13 +64,9 @@ class MyFPMpage : AppCompatActivity() {
                 val intent = Intent(this, LoginActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(intent)
+                finish()
             }
         }
-
-        setContentView(R.layout.activity_my_fpmpage)
-        replaceFragment(NewsFragment())
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
-        navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
     }
 
     private fun replaceFragment(fragment: Fragment){
