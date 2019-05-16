@@ -9,9 +9,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ScrollView
+import android.widget.Scroller
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
@@ -75,7 +78,8 @@ class NewsFragment : androidx.fragment.app.Fragment() {
 
         if(lastDoc == null){
             FirebaseFirestore.getInstance()
-                .collection("news").limit(newsLimit).get()
+                .collection("news")
+                .orderBy("date", Query.Direction.DESCENDING).limit(newsLimit).get()
                 .addOnCompleteListener {
 
                     if(it.result!!.isEmpty) return@addOnCompleteListener
@@ -87,7 +91,7 @@ class NewsFragment : androidx.fragment.app.Fragment() {
 
                     val adapter = GroupAdapter<ViewHolder>()
 
-                    for(new in news.asReversed()){
+                    for(new in news){
                         adapter.add(NewsItem(new, news.size, this))
                     }
 
@@ -96,7 +100,9 @@ class NewsFragment : androidx.fragment.app.Fragment() {
         }
         else {
             FirebaseFirestore.getInstance()
-                .collection("news").limit(newsLimit).startAfter(lastDoc!!).get()
+                .collection("news")
+                .orderBy("date", Query.Direction.DESCENDING).limit(newsLimit)
+                .startAfter(lastDoc!!).get()
                .addOnCompleteListener {
 
                    if(it.result!!.isEmpty) return@addOnCompleteListener
@@ -104,11 +110,9 @@ class NewsFragment : androidx.fragment.app.Fragment() {
                    news.addAll(it.result!!.toObjects(News::class.java))
                    lastDoc = it.result!!.documents.last()
 
-                   Log.d("News", "!!! ${news[0].imageUrl}")
-
                    val adapter = GroupAdapter<ViewHolder>()
 
-                   for(new in news.asReversed()){
+                   for(new in news){
                        adapter.add(NewsItem(new,  news.size, this))
                    }
 

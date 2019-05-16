@@ -52,7 +52,7 @@ class RegPersonPage : AppCompatActivity() {
             intent.putExtra("creatorUid", name)
             intent.putExtra("surname", surname)
             intent.putExtra("phone", phone)
-            intent.putExtra("imageUri", selectedPhotoUri)
+            intent.data = selectedPhotoUri
 
             startActivity(intent)
         }

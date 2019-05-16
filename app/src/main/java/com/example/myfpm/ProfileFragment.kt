@@ -1,11 +1,20 @@
 package com.example.myfpm
 
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_profile.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -27,10 +36,56 @@ class ProfileFragment : androidx.fragment.app.Fragment() {
         return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
+    private lateinit var fio: TextView
+    private lateinit var group: TextView
+    private lateinit var phone: TextView
+    private lateinit var spec: TextView
+    private lateinit var profileImage: ImageView
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setHasOptionsMenu(true)
+
+        fio = prof_name
+        group = prof_group
+        phone = prof_telNum
+        spec = prof_spec
+        profileImage = prof_image
+
+        FirebaseAuth.getInstance().addAuthStateListener {
+            val userUid = it.currentUser?.uid
+            Log.d("Profile", "!!! $userUid !!!")
+
+            if(userUid.isNullOrEmpty()) {
+                Log.d("Profile", "Invalid user")
+                return@addAuthStateListener
+            }
+
+            FirebaseFirestore.getInstance().collection("students")
+                .document(userUid).get().addOnCompleteListener {
+
+                    if(!it.isSuccessful || it.result == null){
+                        Toast.makeText(this.context, "Connection error",
+                            Toast.LENGTH_LONG).show()
+                        return@addOnCompleteListener
+                    }
+
+                    val student = it.result!!.toObject(Student::class.java)?:
+                        return@addOnCompleteListener
+
+                    Picasso.get().load(student.imageUrl).fit().into(profileImage)
+
+                    val fioStr = "${student.name} ${student.surname}"
+
+                    fio.text = fioStr
+                    group.text = student.group
+                    spec.text = student.spec
+                    phone.text = student.phone
+                }
+        }
+
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -49,5 +104,10 @@ class ProfileFragment : androidx.fragment.app.Fragment() {
         inflater?.inflate(R.menu.profmenu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
+}
 
+class Student(val email: String, val  group: String, val imageUrl: String, val name: String,
+              val phone: String, val spec: String, val surname: String, val year: String){
+    constructor():this("", "", "", "", "",
+        "", "", "")
 }

@@ -108,7 +108,7 @@ class Reg2Page : AppCompatActivity() {
         val phone: String = intent.getStringExtra("phone")
         val email = intent.getStringExtra("email")
         val password= intent.getStringExtra("password")
-        val imageUri = intent.getParcelableExtra<Uri>("imageUri")
+        var imageUri = null
 
 
         if(!checkData()) return
@@ -150,6 +150,7 @@ class Reg2Page : AppCompatActivity() {
         val spec = spec_reg_spinner.selectedItem.toString()
         val group = group_reg_spinner.selectedItem.toString()
         val imageFileName = UUID.randomUUID().toString()
+        val imageUri = intent.data
 
         val studentData = HashMap<String, Any>()
         studentData["name"] = name
