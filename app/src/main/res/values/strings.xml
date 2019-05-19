@@ -7,16 +7,10 @@
     <string name="Goto">Далее</string>
     <string name="name">Введите имя</string>
     <string name="sur">Введите фамилию</string>
-    <string name="title_activity_main2">Main2Activity</string>
-    <string name="title_activity_main_project_list">My FPM</string>
     <string name="News">Новости</string>
     <string name="TTable">Расписание</string>
     <string name="Profile">Профиль</string>
     <string name="todo">TODO</string>
-    <string name="title_activity_head">Head</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
     <string name="title_activity_my_fpmpage">MyFPMpage</string>
     <string name="year">Выберите год поступления</string>
     <string name="spec">Выберите специальность</string>
@@ -26,9 +20,6 @@
     <string name="telnum_reg">Введите номер телефона</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="todo2">TODO</string>
-    <string name="todo3">TODO</string>
     <string name="forgot_password_login">Забыли пароль?</string>
     <string name="reset_password">Восстановить пароль</string>
     <string name="loadMore">Загрузить еще</string>

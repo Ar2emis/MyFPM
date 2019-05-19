@@ -9,8 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ScrollView
-import android.widget.Scroller
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -19,10 +17,10 @@ import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
-import io.grpc.Context
 import kotlinx.android.synthetic.main.fragment_news.*
 import kotlinx.android.synthetic.main.news.view.*
 import java.util.*
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener as OnScrollListener
 
 
 private const val ARG_PARAM1 = "param1"
@@ -32,6 +30,7 @@ class NewsFragment : androidx.fragment.app.Fragment() {
 
     var news: MutableList<News> = mutableListOf()
     lateinit var recyclerView: RecyclerView
+    var newsHeight: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,13 +44,25 @@ class NewsFragment : androidx.fragment.app.Fragment() {
         setHasOptionsMenu(true)
 
         recyclerView = recyclerView_news
-        recyclerView.adapter = GroupAdapter<ViewHolder>()
+        val adapter = GroupAdapter<ViewHolder>()
+        recyclerView.adapter = adapter
+
+        fetchNews()
+
+        recyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if(!recyclerView.canScrollVertically(1)) {
+                    fetchNews()
+                    recyclerView.scrollTo(0, newsHeight)
+                }
+            }
+        })
 
         swipeRefreshLayout.setOnRefreshListener {
             refreshNews()
         }
-
-        fetchNews()
 
         add_news_button.setOnClickListener {
             val intent = Intent(this.context, New_news::class.java)
@@ -72,10 +83,9 @@ class NewsFragment : androidx.fragment.app.Fragment() {
     }
 
     private var lastDoc: DocumentSnapshot? = null
-    private val newsLimit: Long = 2
+    private val newsLimit: Long = 5
 
     fun fetchNews(){
-        val newsSize = news.size
 
         if(lastDoc == null){
             FirebaseFirestore.getInstance()
@@ -92,11 +102,21 @@ class NewsFragment : androidx.fragment.app.Fragment() {
 
                     val adapter = GroupAdapter<ViewHolder>()
 
+                    var i = 0
+                    var newsItem: NewsItem? = null
                     for(new in news){
-                        adapter.add(NewsItem(new, news.size, this))
+                        val item = NewsItem(new)
+                        adapter.add(item)
+
+                        if(i == news.size - 1)
+                            newsItem = item
+                        ++i
                     }
 
-                    recyclerView.adapter = adapter
+                    recyclerView.swapAdapter(adapter, true)
+
+                    recyclerView.scrollToPosition(news.size - 1)
+                    recyclerView.scrollTo(0, newsItem!!.height)
                 }
         }
         else {
@@ -114,12 +134,12 @@ class NewsFragment : androidx.fragment.app.Fragment() {
                    val adapter = GroupAdapter<ViewHolder>()
 
                    for(new in news){
-                       adapter.add(NewsItem(new,  news.size, this))
+                       adapter.add(NewsItem(new))
                    }
 
-                   recyclerView.adapter = adapter
-                   recyclerView.scrollToPosition(newsSize - 1)
-                }
+                   recyclerView.swapAdapter(adapter, true)
+                   //recyclerView.scrollToPosition(news.size - 1)
+               }
         }
     }
 
@@ -139,18 +159,19 @@ class NewsFragment : androidx.fragment.app.Fragment() {
     }
 }
 
-class NewsItem(private val new: News, private val size: Int,
-               private val fragment: NewsFragment): Item<ViewHolder>(){
+class NewsItem(private val new: News): Item<ViewHolder>(){
+
+    var height = 0
 
     override fun getLayout(): Int {
         return R.layout.news
     }
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        initializeNew(viewHolder, position, size)
+        initializeNew(viewHolder, position)
     }
 
-    private fun initializeNew(viewHolder: ViewHolder, position: Int, size: Int){
+    private fun initializeNew(viewHolder: ViewHolder, position: Int){
         FirebaseFirestore.getInstance().document("students/${new.creatorUid}")
             .get().addOnCompleteListener {
                 if (!it.isSuccessful) return@addOnCompleteListener
@@ -175,21 +196,12 @@ class NewsItem(private val new: News, private val size: Int,
 
                 viewHolder.itemView.visibility = View.VISIBLE
 
-                if(position == size - 1) {
-                    viewHolder.itemView.load_more_new_text_view.visibility = View.VISIBLE
-                    viewHolder.itemView.load_more_new_text_view.setOnClickListener {
-                        fragment.fetchNews()
-                        viewHolder.itemView.load_more_new_text_view.visibility = View.GONE
-                    }
-                }
-                else {
-                    viewHolder.itemView.load_more_new_text_view.visibility = View.GONE
-                }
+                height = viewHolder.itemView.height
             }
     }
 }
 
-class News(val newUUID: String, val creatorUid: String, val date: Date, val imageUrl: String,
+class News(val newsUUID: String, val creatorUid: String, val date: Date, val imageUrl: String,
            val text: String){
     constructor(): this("","",
         Date(1, 1, 1, 1, 1), "", "")
