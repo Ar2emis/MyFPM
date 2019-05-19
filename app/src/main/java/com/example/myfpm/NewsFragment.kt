@@ -83,7 +83,7 @@ class NewsFragment : androidx.fragment.app.Fragment() {
     }
 
     private var lastDoc: DocumentSnapshot? = null
-    private val newsLimit: Long = 5
+    private val newsLimit: Long = 10
 
     fun fetchNews(){
 
@@ -98,25 +98,14 @@ class NewsFragment : androidx.fragment.app.Fragment() {
                     news.addAll(it.result!!.toObjects(News::class.java))
                     lastDoc = it.result!!.documents.last()
 
-                    Log.d("News", "!!! ${news[0].imageUrl}")
-
                     val adapter = GroupAdapter<ViewHolder>()
 
-                    var i = 0
-                    var newsItem: NewsItem? = null
                     for(new in news){
                         val item = NewsItem(new)
                         adapter.add(item)
-
-                        if(i == news.size - 1)
-                            newsItem = item
-                        ++i
                     }
 
-                    recyclerView.swapAdapter(adapter, true)
-
-                    recyclerView.scrollToPosition(news.size - 1)
-                    recyclerView.scrollTo(0, newsItem!!.height)
+                    recyclerView.swapAdapter(adapter, false)
                 }
         }
         else {
@@ -128,17 +117,28 @@ class NewsFragment : androidx.fragment.app.Fragment() {
 
                    if(it.result!!.isEmpty) return@addOnCompleteListener
 
+                   val newsLastPosition = news.size - 1
                    news.addAll(it.result!!.toObjects(News::class.java))
                    lastDoc = it.result!!.documents.last()
 
                    val adapter = GroupAdapter<ViewHolder>()
 
+                   var i = 0
+                   var newsItem: NewsItem? = null
+
                    for(new in news){
-                       adapter.add(NewsItem(new))
+                       val item = NewsItem(new)
+                       adapter.add(item)
+
+                       if(i == newsLastPosition)
+                           newsItem = item
+                       ++i
                    }
 
                    recyclerView.swapAdapter(adapter, true)
-                   //recyclerView.scrollToPosition(news.size - 1)
+
+                   recyclerView.scrollToPosition(newsLastPosition)
+                   recyclerView.scrollTo(0, newsItem!!.height)
                }
         }
     }
@@ -150,7 +150,7 @@ class NewsFragment : androidx.fragment.app.Fragment() {
         lastDoc = null
         fetchNews()
 
-        swipeRefreshLayout.isRefreshing =false
+        swipeRefreshLayout.isRefreshing = false
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
