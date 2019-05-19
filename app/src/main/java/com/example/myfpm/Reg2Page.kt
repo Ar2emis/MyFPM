@@ -1,5 +1,6 @@
 package com.example.myfpm
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -24,6 +25,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
 import android.os.Environment.getExternalStorageDirectory
+import androidx.appcompat.app.AlertDialog
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -45,8 +47,9 @@ class Reg2Page : AppCompatActivity() {
         FirebaseFirestore.getInstance().collection("reg_spinners").get()
             .addOnSuccessListener { initializeStartSpinner(it, years, year_reg_spinner) }
 
-        sign_up_reg_button.setOnClickListener { signUp() }
-
+        sign_up_reg_button.setOnClickListener {
+            signUp()
+        }
         year_reg_spinner.onItemSelectedListener = object : OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if(position == 0){
@@ -110,6 +113,7 @@ class Reg2Page : AppCompatActivity() {
         spinner.adapter = ArrayAdapter<String>(this,
             android.R.layout.simple_list_item_1, list)
     }
+
 
     private fun signUp(){
         val name: String = intent.getStringExtra("name")
