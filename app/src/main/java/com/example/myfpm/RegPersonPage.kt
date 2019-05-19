@@ -88,8 +88,11 @@ class RegPersonPage : AppCompatActivity() {
                 (height - dimension) / 2,
                 dimension, dimension)
 
-            upload_new_photo_button.background = BitmapDrawable(bitmap)
+                selected_profPhoto.setImageBitmap(bitmap)
+            upload_new_photo_button.alpha =0f
+            //upload_new_photo_button.background = BitmapDrawable(bitmap)
         }
+
 
     }
 

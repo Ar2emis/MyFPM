@@ -65,10 +65,20 @@ android:background="@color/colorBackGround">
             android:id="@+id/upload_new_photo_button"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginEnd="8dp" android:layout_marginRight="8dp"
-            android:visibility="visible" app:layout_constraintHorizontal_bias="0.517"
+            android:visibility="visible"
             android:foregroundGravity="fill"
             android:background="@drawable/round_photo_button"
             android:text="Загрузить фото"
             android:textColor="@color/colorWhite"
-            app:layout_constraintBottom_toTopOf="@+id/name_reg_edit_text" android:layout_marginBottom="8dp"/>
+            app:layout_constraintBottom_toTopOf="@+id/name_reg_edit_text" android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp" android:layout_marginStart="8dp"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView android:layout_width="190dp" android:layout_height="190dp"
+                                                  app:layout_constraintBottom_toBottomOf="@+id/upload_new_photo_button"
+                                                  app:layout_constraintEnd_toEndOf="@+id/upload_new_photo_button"
+                                                  app:civ_border_width="4dp"
+                                                  app:civ_border_color="@color/mainColor"
+                                                  app:layout_constraintStart_toStartOf="@+id/upload_new_photo_button"
+                                                  app:layout_constraintTop_toTopOf="@+id/upload_new_photo_button"
+                                                  android:id="@+id/selected_profPhoto"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

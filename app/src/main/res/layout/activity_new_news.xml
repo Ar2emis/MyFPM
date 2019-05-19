@@ -4,7 +4,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".New_news">
+        tools:context=".New_news"
+android:background="@color/colorBackGround">
     <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -24,6 +25,10 @@
                         android:ems="10"
                         android:id="@+id/input_news"
                         app:layout_constraintStart_toStartOf="parent"
+                        android:background="@drawable/rounded_edit_text"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:minHeight="120dp"
                         android:layout_marginEnd="32dp" app:layout_constraintEnd_toEndOf="parent"
                         android:layout_marginRight="32dp" android:layout_marginLeft="32dp"
                         android:layout_marginStart="32dp" android:hint="Введите текст новости"
@@ -33,6 +38,8 @@
                         android:text="Выберите изображение"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
+                        android:background="@drawable/rounded_news_photo_butt"
+                        android:textColor="@android:color/white"
                         android:id="@+id/upload_photo_in_new_news" android:layout_marginTop="32dp"
                         app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
                         android:layout_marginLeft="8dp" android:layout_marginStart="8dp"
@@ -41,11 +48,23 @@
                 <Button
                         android:text="Создать новость"
                         android:layout_width="wrap_content"
+                        android:background="@drawable/rounded_button"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:textColor="@android:color/white"
                         android:layout_height="wrap_content" android:id="@+id/create_news_button" android:layout_marginTop="32dp"
                         app:layout_constraintTop_toBottomOf="@+id/input_news" android:layout_marginBottom="32dp"
                         app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                 />
+                <ImageView android:layout_width="150dp" android:layout_height="150dp"
+                           app:layout_constraintEnd_toEndOf="@+id/upload_photo_in_new_news"
+                           app:layout_constraintStart_toStartOf="@+id/upload_photo_in_new_news"
+                           app:layout_constraintTop_toTopOf="@+id/upload_photo_in_new_news"
+                           android:background="@drawable/selected_photo_news"
+                           app:layout_constraintBottom_toBottomOf="@+id/upload_photo_in_new_news"
+                           android:id="@+id/news_photo_selected" app:layout_constraintHorizontal_bias="1.0"
+                           app:layout_constraintVertical_bias="1.0"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </ScrollView>

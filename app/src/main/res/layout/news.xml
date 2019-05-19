@@ -3,21 +3,28 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:visibility="invisible">
+        android:layout_height="wrap_content" android:visibility="invisible"
+android:background="@drawable/news_or_day_maket"
+        android:layout_marginTop="8dp"
+android:layout_marginBottom="8dp"
+android:layout_marginRight="8dp"
+android:layout_marginLeft="8dp">
 
     <ImageView
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:id="@+id/image_news_image_view"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/text_news_text_view"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="24dp"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp"
             android:layout_marginRight="24dp" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginLeft="24dp" android:layout_marginStart="24dp"
-            app:layout_constraintHorizontal_bias="0.0" android:cropToPadding="true"/>
-    <ImageView
+            android:minHeight="0dp"
+            app:layout_constraintHorizontal_bias="0.0" android:cropToPadding="true"
+            android:layout_marginBottom="16dp" app:layout_constraintBottom_toBottomOf="parent"/>
+    <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
+            app:civ_border_width="2dp"
+            app:civ_border_color="@color/mainColor"
             android:id="@+id/user_image_news_image_view"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
@@ -39,20 +46,14 @@
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginLeft="24dp"
             android:layout_marginStart="24dp" android:layout_marginEnd="24dp" android:layout_marginRight="24dp"
             app:layout_constraintHorizontal_bias="0.0" android:layout_marginTop="12dp"
-            app:layout_constraintTop_toBottomOf="@+id/user_image_news_image_view"/>
-    <View
-            android:id="@+id/divider"
-            android:layout_width="395dp"
-            android:layout_height="1dp"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@+id/image_news_image_view"
-            android:layout_marginTop="16dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/user_image_news_image_view"
+            app:layout_constraintBottom_toTopOf="@+id/image_news_image_view" android:layout_marginBottom="8dp"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/date_news_text_view"
             app:layout_constraintTop_toTopOf="@+id/user_name_news_text_view"
+            app:layout_goneMarginLeft="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/user_name_news_text_view"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"/>

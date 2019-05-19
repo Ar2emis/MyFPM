@@ -12,6 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import androidx.appcompat.app.ActionBar
 import kotlinx.android.synthetic.main.activity_new_news.*
+import kotlinx.android.synthetic.main.activity_reg_person_page.*
 import java.util.*
 
 class New_news : AppCompatActivity() {
@@ -109,7 +110,9 @@ class New_news : AppCompatActivity() {
             val bitmap = ImageDesigner().handleSamplingAndRotationBitmap(this,
                 selectedPhotoUri!!)
 
-            upload_photo_in_new_news.background = BitmapDrawable(bitmap)
+
+           news_photo_selected.setImageBitmap(bitmap)
+            upload_photo_in_new_news.alpha =0f
         }
 
     }

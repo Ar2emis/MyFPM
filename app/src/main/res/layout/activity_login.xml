@@ -42,6 +42,7 @@ android:background="@color/colorBackGround">
             android:ems="10"
             android:background="@drawable/rounded_edit_text"
             android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:id="@+id/password_login_edit_text"
             android:layout_marginStart="48dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="48dp"
