@@ -61,7 +61,6 @@ android:background="@color/colorBackGround">
                            app:layout_constraintEnd_toEndOf="@+id/upload_photo_in_new_news"
                            app:layout_constraintStart_toStartOf="@+id/upload_photo_in_new_news"
                            app:layout_constraintTop_toTopOf="@+id/upload_photo_in_new_news"
-                           android:background="@drawable/selected_photo_news"
                            app:layout_constraintBottom_toBottomOf="@+id/upload_photo_in_new_news"
                            android:id="@+id/news_photo_selected" app:layout_constraintHorizontal_bias="1.0"
                            app:layout_constraintVertical_bias="1.0"/>

@@ -78,10 +78,10 @@ class ProfileFragment : androidx.fragment.app.Fragment() {
 
                     val fioStr = "${student.name} ${student.surname}"
 
-                    fio.text = fioStr
-                    group.text = student.group
-                    spec.text = student.spec
-                    phone.text = student.phone
+                    fio.text = "Ф.И.О: " + fioStr
+                    group.text = "Группа: " + student.group
+                    spec.text =  "Специальность: " + student.spec
+                    phone.text = "Моб. телефон: " + student.phone
                 }
         }
 
