@@ -188,8 +188,11 @@ class NewsItem(private val new: News): Item<ViewHolder>(){
                 viewHolder.itemView.text_news_text_view.text = new.text
                 viewHolder.itemView.date_news_text_view.text = date
 
+                if(new.imageUrl != "null")
                 Picasso.get().load(new.imageUrl)
                     .into(viewHolder.itemView.image_news_image_view)
+                else
+                    viewHolder.itemView.image_news_image_view.visibility = View.GONE
                 Picasso.get().load(it.result!!.getString("imageUrl"))
                     .centerCrop().resize(128, 128)
                     .into(viewHolder.itemView.user_image_news_image_view)
