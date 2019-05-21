@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
@@ -66,7 +67,8 @@ class TimeTableFragment : androidx.fragment.app.Fragment() {
         val groupName = student.group.substringAfter("-")
 
         FirebaseFirestore.getInstance()
-            .collection("specs/spec_$specName/groups/group_$groupName/timetable").get()
+            .collection("specs/spec_$specName/groups/group_$groupName/timetable")
+            .orderBy("id", Query.Direction.ASCENDING).get()
             .addOnCompleteListener {
                 if(!it.isSuccessful || it.result == null){
                     Toast.makeText(this.context, "Connection error", Toast.LENGTH_SHORT).show()
@@ -112,9 +114,21 @@ class DayItem(private val day: Day): Item<ViewHolder>() {
         viewHolder.itemView.name_of_a_day.text = day.name
 
         var pairListStr: String = ""
-        for(pair in day.lessonsList)
-            pairListStr += pair.substringBefore("/") +"\n" +
-                    pair.substringAfter("/")+"\n\n"
+        var i = 0
+        for(pair in day.lessonsList) {
+            if(pair.contains("/"))
+                pairListStr += pair.substringBefore("/") + "\n" +
+                    pair.substringAfter("/")
+            else
+                pairListStr += pair
+
+            if(i != day.lessonsList.size - 1) {
+                pairListStr += "\n\n"
+                ++i
+            }
+            else
+                pairListStr += "\n"
+        }
 
         viewHolder.itemView.day_lessons.text = pairListStr
 
@@ -124,6 +138,6 @@ class DayItem(private val day: Day): Item<ViewHolder>() {
 
 }
 
-class Day(val name: String, val lessonsList: List<String>){
-    constructor():this("", listOf<String>())
+class Day(val id: Int, val name: String, val lessonsList: List<String>){
+    constructor():this(0,"", listOf<String>())
 }

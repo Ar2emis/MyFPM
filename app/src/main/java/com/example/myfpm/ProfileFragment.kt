@@ -4,11 +4,13 @@ package com.example.myfpm
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.Layout
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -41,7 +43,7 @@ class ProfileFragment : androidx.fragment.app.Fragment() {
     private lateinit var phone: TextView
     private lateinit var spec: TextView
     private lateinit var profileImage: ImageView
-
+    private lateinit var profileLayout: ConstraintLayout
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -52,6 +54,7 @@ class ProfileFragment : androidx.fragment.app.Fragment() {
         phone = prof_telNum
         spec = prof_spec
         profileImage = prof_image
+        profileLayout = profile_layout
 
         FirebaseAuth.getInstance().addAuthStateListener {
             val userUid = it.currentUser?.uid
@@ -74,7 +77,8 @@ class ProfileFragment : androidx.fragment.app.Fragment() {
                     val student = it.result!!.toObject(Student::class.java)?:
                         return@addOnCompleteListener
 
-                    Picasso.get().load(student.imageUrl).fit().into(profileImage)
+                    Picasso.get().load(student.imageUrl).centerCrop()
+                        .resize(400, 400).into(profileImage)
 
                     val fioStr = "${student.name} ${student.surname}"
 
@@ -82,6 +86,8 @@ class ProfileFragment : androidx.fragment.app.Fragment() {
                     group.text = "Группа: " + student.group
                     spec.text =  "Специальность: " + student.spec
                     phone.text = "Моб. телефон: " + student.phone
+
+                    profileLayout.visibility = View.VISIBLE
                 }
         }
 

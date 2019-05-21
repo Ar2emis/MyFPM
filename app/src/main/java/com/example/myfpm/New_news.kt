@@ -31,6 +31,7 @@ class New_news : AppCompatActivity() {
         }
 
         create_news_button.setOnClickListener {
+            create_news_button.isEnabled = false
             createNews()
         }
     }
@@ -89,11 +90,13 @@ class New_news : AppCompatActivity() {
                 if(!it.isSuccessful){
                     Toast.makeText(this, "Error, news not created",
                         Toast.LENGTH_SHORT).show()
+                    create_news_button.isEnabled = true
                     return@addOnCompleteListener
                 }
 
                 Toast.makeText(this, "News are created",
                     Toast.LENGTH_SHORT).show()
+
                 val intent = Intent(this, MyFPMpage::class.java)
                 startActivity(intent)
             }

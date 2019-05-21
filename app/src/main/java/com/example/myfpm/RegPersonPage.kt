@@ -15,7 +15,7 @@ import android.graphics.Bitmap
 import androidx.appcompat.app.ActionBar
 import com.squareup.picasso.Picasso
 import io.grpc.internal.Stream
-import java.io.OutputStream as OutputStream1
+import java.io.OutputStream
 
 
 class RegPersonPage : AppCompatActivity() {

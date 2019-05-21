@@ -11,7 +11,7 @@
     <string name="TTable">Расписание</string>
     <string name="Profile">Профиль</string>
     <string name="todo">TODO</string>
-    <string name="title_activity_my_fpmpage">MyFPMpage</string>
+    <string name="title_activity_my_fpmpage">MyFPM</string>
     <string name="year">Выберите год поступления</string>
     <string name="spec">Выберите специальность</string>
     <string name="gr">Выберите группу</string>
